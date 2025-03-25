@@ -1,4 +1,4 @@
-# 3D Coding Journey 🚀🎨  
+# Project: Bloom of Death  
 This is a 3D mystery game developed using Java3D, where the player takes on the role of a detective with a dark secret. Instead of solving a crime, the detective is secretly working for the killer to hide and manipulate evidence in exchange for money.
 
 ## 📌 Features
@@ -46,8 +46,5 @@ BloomOfDeath/
    - Go to **File** > **Import** > **General** > **Existing Projects into Workspace**.
    - Select the folder where the project was cloned/extracted.
 3. The `lib/` folder contains all required libraries (must be .jdk not .jre)
-   - relink .jar files in build dependencies
    - **Run** --> **Run configurations**  --> **arguments** -->  copy paste those in VM arguments
 4. Right-click on **BODMain.java** and select **Run As** > **Java Application**.
-
-You should now see the 3D objects in action!
