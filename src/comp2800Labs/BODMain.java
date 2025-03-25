@@ -84,7 +84,7 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 	    
 	    // write your codes here ------------------------------------------------------------------------
 	    // exp : roomTG.addChild(something)
-	    roomTG.addChild(Carpet.create_Carpet());
+	    //roomTG.addChild(Carpet.create_Carpet());
 	    
 	    
 	    

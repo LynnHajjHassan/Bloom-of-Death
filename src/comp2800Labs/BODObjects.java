@@ -1,5 +1,7 @@
 package comp2800Labs;
 
+import java.io.File;
+
 /* Copyright material for students working on assignments */
 
 import java.io.FileNotFoundException;
@@ -9,6 +11,7 @@ import org.jogamp.java3d.loaders.*;
 import org.jogamp.java3d.loaders.objectfile.ObjectFile;
 import org.jogamp.java3d.utils.geometry.Box;
 import org.jogamp.java3d.utils.image.TextureLoader;
+import org.jogamp.java3d.utils.universe.SimpleUniverse;
 import org.jogamp.vecmath.*;
 import org.jogamp.java3d.utils.geometry.Primitive;
 
@@ -85,19 +88,22 @@ public abstract class BODObjects {
 	    app.setMaterial(mtl); // Set the material to the appearance
 	    obj_shape.setAppearance(app); // Apply the appearance to the shape
 	}
-	protected static Texture textured_App(String name) {
-		String filename = "images/" + name + ".jpg";       // tell the folder of the image
-		TextureLoader loader = new TextureLoader(filename, null);
-		ImageComponent2D image = loader.getImage();        // load the image
-		if (image == null)
-			System.out.println("Cannot load file: " + filename);
-
-		Texture2D texture = new Texture2D(Texture.BASE_LEVEL,
-				Texture.RGBA, image.getWidth(), image.getHeight());
-		texture.setImage(0, image);                        // set image for the texture
-
-		return texture;
-	}
+	 protected static Texture textured_App(String name) {
+	        String[] extensions = {".png", ".jpg", ".jpeg"};
+	        for (String ext : extensions) {
+	            String path = "textures/" + name + ext;
+	            File file = new File(path);
+	            System.out.println("Trying texture: " + file.getAbsolutePath());
+	            if (file.exists()) {
+	                TextureLoader loader = new TextureLoader(path, "RGB", new Canvas3D(SimpleUniverse.getPreferredConfiguration()));
+	                Texture texture = loader.getTexture();
+	                System.out.println("Load success for: " + path + " = " + (texture != null));
+	                return texture;
+	            }
+	        }
+	        System.out.println("Texture not found for " + name);
+	        return null;
+	    }
 	
 }
 

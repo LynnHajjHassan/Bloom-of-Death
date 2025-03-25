@@ -149,16 +149,13 @@ public class Room {
 		    app.setTextureAttributes(texAttr);
 		    System.out.println("Applying texture to wall: " + wallName);		       
 			app.setTexture(load_Texture(wallName)); // Load the texture
-
-		    
-		    
-		    
+	    
 		  
 		    return app;
 		}
 		
 		private  static Texture load_Texture(String name) {
-			String filename = "images/" + name + ".jpg";       // tell the folder of the image
+			String filename = "textures/" + name + ".jpg";       // tell the folder of the image
 			TextureLoader loader = new TextureLoader(filename, null);
 			ImageComponent2D image = loader.getImage();        // load the image
 			if (image == null)
