@@ -49,16 +49,6 @@ public class TableLamp {
 		TLObjects[5] = new TLShadeFitting(); 
 		TLObjects[4].add_Child(TLObjects[5].position_Object());
 		
-		
-		// New added to make the coordinate system -----------------------
-		CoordinateSystem coordinateSystem = new CoordinateSystem();			// Creating the coordinate system
-		Transform3D coordinateTransform = new Transform3D();				// Created to change the location of the coordinate system
-		coordinateTransform.setTranslation(new Vector3f(0.0f, 1.0f, 0.0f)); 
-		TransformGroup coordSystemTG = new TransformGroup(coordinateTransform);
-		coordSystemTG.addChild(coordinateSystem.get_BranchGroup()); 		// Attach the objBG of the coord system to it's objTG
-		TableLampTG.addChild(coordSystemTG); 										// Attach the objTG of the coordsystem to FanTG
-		//----------------------------------------------------------
-		
 		return TableLampTG;
 	}
 

@@ -24,6 +24,8 @@ public abstract class BODObjects {
 	protected Vector3f post;                               // use 'post' to specify location
 	protected Shape3D obj_shape, obj_shape2 , obj_shape3, obj_shape4, obj_shape5;	// NEW: Added obj_shape2...5, for the FanBlades and the front side of the cylinder connecting them
 	
+	protected Appearance app = new Appearance();
+	private float shine = 32;   						   // Default shininess value                            
 	
 	public abstract TransformGroup position_Object();      // need to be defined in derived classes
 	public abstract void add_Child(TransformGroup nextTG);
@@ -52,6 +54,7 @@ public abstract class BODObjects {
 			System.err.println(e);
 			System.exit(1);
 		}
+		
 		return s;                                          // return the object shape in 's'
 	}
 	
@@ -62,13 +65,15 @@ public abstract class BODObjects {
 		scaler.setTranslation(post);                      // set translations for the 4x4 matrix
 		objTG = new TransformGroup(scaler);               // set the translation BG with the 4x4 matrix
 		objBG = loadShape(obj_name).getSceneGroup();      // load external object to 'objBG'
+		// Method 1: Count immediate children
+		int childCount = objBG.numChildren();
+		System.out.println(obj_name+" has " + childCount + " children");
 		obj_shape = (Shape3D) objBG.getChild(0);          // Get and cast the object to 'obj_shape'
 		obj_shape.setName(obj_name);                      // Use the name to identify the object 
 		
 	}
-		
-	protected Appearance app = new Appearance();
-	private int shine = 32;                                // specify common values for object's appearance
+	
+	// Default colors values for objects, can be edited 
 	protected Color3f[] mtl_clr = {
 			new Color3f(1.000000f, 1.000000f, 1.000000f),
 			new Color3f(0.772500f, 0.654900f, 0.000000f),	
@@ -76,17 +81,24 @@ public abstract class BODObjects {
 			new Color3f(0.000000f, 0.000000f, 0.000000f)
    };
 	
+	// Method to set the shininess value 
+   protected void setShininess(float shine) {
+	   this.shine = shine ; 
+   }
+
+	
 	protected void obj_Appearance() {
 	    System.out.println("Applying appearance to " + obj_shape.getName());
 	    Material mtl = new Material();
 	    mtl.setShininess(shine);
-	    mtl.setAmbientColor(mtl_clr[0]); // Ambient color
-	    mtl.setDiffuseColor(mtl_clr[1]); // Diffuse color
-	    mtl.setSpecularColor(mtl_clr[2]); // Specular color
-	    mtl.setEmissiveColor(mtl_clr[3]); // Emissive color
-	    mtl.setLightingEnable(true); // Enable lighting
-	    app.setMaterial(mtl); // Set the material to the appearance
-	    obj_shape.setAppearance(app); // Apply the appearance to the shape
+	    mtl.setAmbientColor(mtl_clr[0]); 				// Ambient color
+	    mtl.setDiffuseColor(mtl_clr[1]); 				// Diffuse color
+	    mtl.setSpecularColor(mtl_clr[2]); 				// Specular color
+	    mtl.setEmissiveColor(mtl_clr[3]); 				// Emissive color
+	    mtl.setLightingEnable(true); 					// Enable lighting
+	     
+	    app.setMaterial(mtl); 							// Set the material to the appearance
+	    obj_shape.setAppearance(app); 					// Apply the appearance to the shape
 	}
 	 protected static Texture textured_App(String name) {
 	        String[] extensions = {".png", ".jpg", ".jpeg"};
@@ -117,7 +129,7 @@ class BaseShape extends BODObjects {
 	}
 	
 	protected Node create_Object() {
-		app = Commons.set_Appearance(Commons.White);   // set the appearance for the base
+		app = Commons.set_Appearance(Commons.White);  	    // set the appearance for the base
 		app.setTexture(textured_App("MarbleTexture"));     // set texture for the base
 		TransparencyAttributes ta =                        // value: FASTEST NICEST SCREEN_DOOR BLENDED NONE
 				new TransparencyAttributes(TransparencyAttributes.SCREEN_DOOR, 0.5f);

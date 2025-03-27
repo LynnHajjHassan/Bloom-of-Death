@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import org.jogamp.java3d.*;
@@ -63,8 +64,148 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
     private final double bounceSpeed = 8.0; // Controls the speed of the bounce
     private final double bounceAmplitude = 0.05; // Controls the height of the bounce
     private boolean isMoving = false; // Tracks if the user is moving
+    
+    
+    // Noor debugging part -----------------------------------------------------------------------------------------  
+    private boolean isCrouching = false;  // used for croushing 
+    private final double crouchOffset = -0.5; // Lower height by 0.5 units
+    private static TransformGroup addReferenceCornerMarkers() {    //TEMPORARY FUNCTION%%%%%%%%%%%%%%%%%%%%%%%%%%%% DELETE ME LATER %%%%%
+        TransformGroup cornerMarkersTG = new TransformGroup();
 
+        // Define positions
+        Vector3d backLeft = new Vector3d(-Room.roomWidth + 1, 0.5, -Room.roomLength + 1);
+        Vector3d backRight = new Vector3d(Room.roomWidth - 1, 0.5, -Room.roomLength + 1);
+        Vector3d frontRight = new Vector3d(Room.roomWidth - 1, 0.5, Room.roomLength - 1);
+        Vector3d frontLeft = new Vector3d(-Room.roomWidth + 1, 0.5, Room.roomLength - 1);
+
+        cornerMarkersTG.addChild(createColoredMarkerBox(frontLeft, new Color3f(1, 0, 0)));   // Red - back-right
+        cornerMarkersTG.addChild(createColoredMarkerBox(backLeft, new Color3f(0, 1, 0)));    // Green - front-right
+        cornerMarkersTG.addChild(createColoredMarkerBox(frontRight, new Color3f(0, 0, 1)));  // Blue - back-left
+        cornerMarkersTG.addChild(createColoredMarkerBox(backRight, new Color3f(1, 1, 0)));   // Yellow - front-left
+
+
+        return cornerMarkersTG;
+    }
+
+    private static TransformGroup createColoredMarkerBox(Vector3d position, Color3f color) { //TEMPORARY FUNCTION%%%%%%%%%%%%%%%%%%%%%%%%%%%% DELETE ME LATER %%%%%
+        Appearance app = new Appearance();
+        Material mat = new Material(color, new Color3f(0, 0, 0), color, color, 80f);
+        mat.setLightingEnable(true);
+        app.setMaterial(mat);
+
+        Box box = new Box(1.0f, 1.0f, 1.0f, app);  // 2x2x2 box marker
+
+        Transform3D transform = new Transform3D();
+        transform.setTranslation(position);
+
+        TransformGroup tg = new TransformGroup(transform);
+        tg.addChild(box);
+        return tg;
+    }
+    
+    private void toggleCrouch() {
+        Transform3D transform = new Transform3D();
+        viewTransformGroup.getTransform(transform);
+        Vector3d currentPosition = new Vector3d();
+        transform.get(currentPosition);
+
+        if (isCrouching) {
+            currentPosition.y -= crouchOffset; // stand up
+        } else {
+            currentPosition.y += crouchOffset; // crouch down
+        }
+
+        transform.setTranslation(currentPosition);
+        viewTransformGroup.setTransform(transform);
+        isCrouching = !isCrouching;
+    }
+    
+    private void addMiniMap(JFrame frame) {//TEMPORARY FUNCTION%%%%%%%%%%%%%%%%%%%%%%%%%%%% DELETE ME LATER %%%%%
+        Canvas3D minimapCanvas = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
+        SimpleUniverse miniUniverse = new SimpleUniverse(minimapCanvas);
+        
+        Transform3D miniViewTransform = new Transform3D();
+        miniViewTransform.lookAt(
+            new Point3d(250, 100.0, 0),    // High and far back corner
+            new Point3d(50, 15, 0),        // Look at room center
+            new Vector3d(0, 1, 0)        // Up vector
+        );
+        miniViewTransform.invert();
+        miniUniverse.getViewingPlatform().getViewPlatformTransform().setTransform(miniViewTransform);
+
+
+        // Add a simple minimap scene
+        BranchGroup miniScene = create_MiniMapScene();
+        miniUniverse.addBranchGraph(miniScene);
+
+        // Add minimap using absolute positioning on top-right
+        minimapCanvas.setBounds(frame.getWidth() - 540, 20, 500, 200);
+        minimapCanvas.setFocusable(false);
+
+        JLayeredPane layeredPane = frame.getLayeredPane();
+        layeredPane.add(minimapCanvas, JLayeredPane.PALETTE_LAYER);
+        
+        View miniView = miniUniverse.getViewer().getView();
+        miniView.setBackClipDistance(500.0);
+        miniView.setFrontClipDistance(0.1);
+
+    }
+
+    public static BranchGroup create_MiniMapScene() {//TEMPORARY FUNCTION%%%%%%%%%%%%%%%%%%%%%%%%%%%% DELETE ME LATER %%%%%
+        BranchGroup miniSceneBG = new BranchGroup();
+        TransformGroup sceneTG = new TransformGroup();
+
+        // Add the room
+        TransformGroup roomTG = Room.createEmptyRoom();
+        sceneTG.addChild(roomTG);
+
+        // Add only major objects
+        roomTG.addChild(TableLamp.create_TableLamp());
+
+        // Add only major objects
+        sceneTG.addChild(addDebugCorners());
    
+        // Add debug corner markers
+        sceneTG.addChild(addDebugCorners());
+      
+
+        Lights.setupSceneEffects(sceneTG);
+
+        miniSceneBG.addChild(sceneTG);
+        miniSceneBG.compile();
+        return miniSceneBG;
+    }
+    
+    private static TransformGroup addDebugCorners() {    //TEMPORARY FUNCTION%%%%%%%%%%%%%%%%%%%%%%%%%%%% DELETE ME LATER %%%%%
+        TransformGroup debugCornersTG = new TransformGroup();
+
+        // Corner positions based on roomWidth and roomLength
+        double[][] corners = {
+            { Room.roomWidth, 0.1, Room.roomLength },    // Front-right corner
+            { -Room.roomWidth, 0.1, Room.roomLength },   // Front-left corner
+            { Room.roomWidth, 0.1, -Room.roomLength },   // Back-right corner
+            { -Room.roomWidth, 0.1, -Room.roomLength }   // Back-left corner
+        };
+
+        for (double[] c : corners) {
+            Transform3D t3d = new Transform3D();
+            t3d.setTranslation(new Vector3d(c[0], c[1], c[2]));
+            TransformGroup cornerTG = new TransformGroup(t3d);
+
+            // Create a small colored box for each corner
+            Appearance app = new Appearance();
+            Color3f color = new Color3f((float)Math.random(), (float)Math.random(), (float)Math.random());
+            Material mtl = new Material(color, new Color3f(0,0,0), color, color, 80f);
+            mtl.setLightingEnable(true);
+            app.setMaterial(mtl);
+
+            cornerTG.addChild(new Box(0.5f, 0.5f, 0.5f, app));
+            debugCornersTG.addChild(cornerTG);
+        }
+
+        return debugCornersTG;
+    }
+// ---------------------------------------------------------------------------------------------------------------
     
    
 
@@ -77,11 +218,32 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 	    TransformGroup roomTG = Room.createEmptyRoom();
 	    
 	    // Add the room to the sceneTG
-	    sceneTG.addChild(roomTG);
+	     sceneTG.addChild(roomTG);
 	    
 		// Create the lamp to the room 
 	    roomTG.addChild(TableLamp.create_TableLamp());
-	    
+		
+		// Create the room's ceiling lamp 
+		//sceneTG.addChild(CeilingLamp.create_CeilingLamp());
+
+
+		
+		// Setting up the light resource, and applying it to the TableLamp sceneBG
+		// Add ambient light
+		AmbientLight ambientLight = new AmbientLight(new Color3f(1.0f, 1.0f, 1.0f));
+		ambientLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0));
+		sceneBG.addChild(ambientLight);
+		// Add directional light
+		DirectionalLight directionalLight = new DirectionalLight(
+		    new Color3f(1.0f, 1.0f, 1.0f), // Light color
+		    new Vector3f(-1.0f, -1.0f, -1.0f) // Light direction
+		);
+		directionalLight.setInfluencingBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0));
+		sceneTG.addChild(directionalLight);
+
+		
+		
+		
 	    // write your codes here ------------------------------------------------------------------------
 	    // exp : roomTG.addChild(something)
 	    //roomTG.addChild(Carpet.create_Carpet());
@@ -92,10 +254,13 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 	   
 		
 	   // Set up lighting for sceneTG 
-	    Lights.setupSceneEffects(sceneTG);
+	   Lights.setupSceneEffects(sceneTG);
+	   
+	   // Noor's debugging 
+	   sceneTG.addChild(addReferenceCornerMarkers()); //TEMPORARY FUNCTION CALL%%%%%%%%%%%%%%%%%%%%%%%%%%%% DELETE ME LATER %%%%%
 
         
-	   //sceneTG.addChild(CommonsLH.rotate_Behavior(9000, sceneTG));
+	   //sceneTG.addChild(Commons.rotate_Behavior(9000, sceneTG));
        sceneBG.addChild(sceneTG);                        
 		
 		
@@ -174,6 +339,10 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 	    }
 	    robot.mouseMove(centerPoint.getX(), centerPoint.getY());
 	    
+	    // Noor's debugging steps, to add the minimap  -----------------------------------------------------	    
+	    //addMiniMap(frame);    //minimap    killswitch
+	    //-------------------------------------------------------------
+	    
 	}
 	
 	
@@ -203,6 +372,14 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 	    Vector3d movement = new Vector3d();
 
 	    switch (keyCode) {
+		    // Noor's debugging steps ------------------------
+		    case KeyEvent.VK_C: // Toggle crouch
+		        toggleCrouch();
+		        break;
+		    case KeyEvent.VK_ESCAPE: // Quit the application
+		        System.exit(0);
+		        break;
+		    // ------------------------------------------
 	        case KeyEvent.VK_UP: // Move forward
 	            movement.set(0, 0, -moveSpeed);
 	            isMoving = true; // Start tracking movement
@@ -235,16 +412,23 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 
 	    // Update position
 	    currentPosition.add(movement);
+	    
+	    // Noor's debugging, for the crouching thing ---------------------------
+	    // Restrict movement: Prevent the user from going outside the room
+        double minY = isCrouching ? -17.8 : 0.2; 
+        double maxY = isCrouching ? -17.8 : 0.2;
+        //---------------------------------------------------------------------------
 
 
 	    // Restrict movement: Prevent the user from going outside the room
-	    double minY = 0.2; // Minimum walking height (adjust as needed)
-	    double maxY = 0.2; // Maximum walking height (adjust as needed)
+	   // double minY = 0.2; // Minimum walking height (adjust as needed)  Commented those to make noor's debugging works, we will remove the comments later on 
+	   //double maxY = 0.2; // Maximum walking height (adjust as needed)
 	    double maxX = Room.roomWidth - 5;
 	    double minX = - (Room.roomWidth - 5 ) ; 
 	    double minZ = - ( Room.roomLength - 5 ) ;
 	    double maxZ = Room.roomLength - 5 ;
-
+	    
+	    
 	    if (currentPosition.y < minY) {
 	        currentPosition.y = minY; // Keep the user above the ground
 	    }
