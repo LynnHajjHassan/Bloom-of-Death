@@ -215,8 +215,7 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 		TransformGroup sceneTG = new TransformGroup();
 			
 		// Create the room 
-	    TransformGroup roomTG = Room.createEmptyRoom();
-	    
+	    TransformGroup roomTG = Room.createEmptyRoom();	    
 	    // Add the room to the sceneTG
 	     sceneTG.addChild(roomTG);
 	    
@@ -225,7 +224,7 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 		
 		// Create the room's ceiling lamp 
 		//sceneTG.addChild(CeilingLamp.create_CeilingLamp());
-
+	    
 
 		
 		// Setting up the light resource, and applying it to the TableLamp sceneBG
@@ -246,19 +245,28 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 		
 	    // write your codes here ------------------------------------------------------------------------
 	    // exp : roomTG.addChild(something)
-	    //roomTG.addChild(Carpet.create_Carpet());
 	    
-	    
-	    
+		// Adding Noor's objects 
+		TransformGroup sofaTG = Sofa.create_Sofa();
+		roomTG.addChild(sofaTG);																						 
+		TransformGroup corpseTG = Corpse.create_Corpse();
+		 roomTG.addChild(corpseTG);																					    
+		 TransformGroup carpetTG = Carpet.create_Carpet();
+		 roomTG.addChild(carpetTG);
+		 TransformGroup table5TG = Table5.create_Table5();
+		 roomTG.addChild(table5TG);		
+		    
+		    
+		    
 	    //-------------------------------------------------------------------------------------------------------------
 	   
 		
 	   // Set up lighting for sceneTG 
 	   Lights.setupSceneEffects(sceneTG);
 	   
-	   // Noor's debugging 
+	   // Noor's debugging------------------------------------------------------------------------------------------------------------------
 	   sceneTG.addChild(addReferenceCornerMarkers()); //TEMPORARY FUNCTION CALL%%%%%%%%%%%%%%%%%%%%%%%%%%%% DELETE ME LATER %%%%%
-
+	   //------------------------------------------------------------------------------------------------------------
         
 	   //sceneTG.addChild(Commons.rotate_Behavior(9000, sceneTG));
        sceneBG.addChild(sceneTG);                        
@@ -353,6 +361,8 @@ public class BODMain extends JPanel implements KeyListener, MouseListener, Mouse
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
     
+	
+	
 //------------------------------------------------------------------------------------------	
 	
 	@Override	

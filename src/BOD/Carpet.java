@@ -15,17 +15,36 @@ public class Carpet {
 }
 
 class CarpetMain extends BODObjects {
-    public CarpetMain() {
-        scale = 1.0d; // scale is already handled by geometry size
-        post = new Vector3f(0.0f, -0.445f, 0.25f);
-        create_Geometry();
-        create_Appearance();
-    }
+	public CarpetMain() {
+	    scale = 60.0d;
+	    post = new Vector3f(0.0f, -18.0f, 0.25f);
+	    objBG = new BranchGroup();
+	    create_Geometry();
+	    create_Appearance();
+
+	    // mimic transform_Object behavior:
+	    Transform3D transform = new Transform3D();
+	    transform.setTranslation(post);
+	    transform.setScale(scale);
+	    objTG = new TransformGroup(transform);
+
+	    // Set up capabilities and collision bounds
+	    objTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	    objTG.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+	    objTG.setCapability(TransformGroup.ENABLE_PICK_REPORTING);
+	    objTG.setPickable(true);
+	    objTG.setBounds(new BoundingBox(
+	        new Point3d(-1.0, -0.05, -2.4),  // Adjust these values as needed
+	        new Point3d(1.0, 0.05, 2.4)
+	    ));
+
+	    objTG.addChild(objBG);
+	}
 
     private void create_Geometry() {
-        float halfX = 0.8f;
-        float halfY = 0.01f;   // thickness
-        float halfZ = 0.8f;
+        float halfX = 0.5f;
+        float halfY = 0.005f;   // thickness
+        float halfZ = 1.2f;
 
         Point3f[] vertices = {
             // Top face
@@ -87,6 +106,14 @@ class CarpetMain extends BODObjects {
         }
 
         obj_shape = new Shape3D(geometry);
+        obj_shape.setCapability(Node.ALLOW_BOUNDS_READ);
+        obj_shape.setCapability(Node.ALLOW_BOUNDS_WRITE);
+        obj_shape.setPickable(true);
+        obj_shape.setCollidable(true);
+        obj_shape.setBounds(new BoundingBox(
+            new Point3d(-1.0, -0.05, -2.4),  // same as your earlier box
+            new Point3d(1.0, 0.05, 2.4)
+        ));
         objBG.addChild(obj_shape);
     }
 
@@ -106,7 +133,9 @@ class CarpetMain extends BODObjects {
         polyAttr.setCullFace(PolygonAttributes.CULL_NONE);
         app.setPolygonAttributes(polyAttr);
 
-        obj_shape.setAppearance(app);
+        if (obj_shape != null) {
+            obj_shape.setAppearance(app);
+        }
     }
 
     private void assignNormal(QuadArray geometry, int startIndex, Vector3f normal) {
@@ -116,7 +145,6 @@ class CarpetMain extends BODObjects {
     }
 
     public TransformGroup position_Object() {
-        objTG.addChild(objBG);
         return objTG;
     }
 

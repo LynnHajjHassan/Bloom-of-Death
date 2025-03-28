@@ -32,7 +32,7 @@ public class Room {
 	// Room dimensions
     protected static double roomWidth = 50.0;  
     protected static double roomLength = 100.0; 
-    protected static double roomHeight = 25.0;
+    protected static double roomHeight = 35.0;
         
 	
 	// Method used to connect the room's walls.
@@ -53,42 +53,42 @@ public class Room {
 		 
 		    // Floor
 		    roomTG.addChild(createWall(
-		        new Vector3d(0, -18, 0), // Position: Centered at the bottom
+		        new Vector3d(0, -18, 0),                    // Position: Centered at the bottom
 		        new Vector3d(roomWidth, 0.05, roomLength), // Scale: Wide and long, but thin
 		        floorAppearance
 		    ));
 
 		    // Left Wall
 		    roomTG.addChild(createWall(
-		        new Vector3d(-roomWidth, -2, 0), // Position: Left side of the room
+		        new Vector3d(-roomWidth, -8, 0),           // Position: Left side of the room
 		        new Vector3d(0.05, roomHeight, roomLength), // Scale: Tall and long, but thin
 		        wallsAppearance
 		    ));
 
 		    // Right Wall
 		    roomTG.addChild(createWall(
-		        new Vector3d( roomWidth , -2, 0), // Position: Right side of the room
+		        new Vector3d( roomWidth , -2, 0),           // Position: Right side of the room
 		        new Vector3d(0.05, roomHeight, roomLength), // Scale: Tall and long, but thin
 		        wallsAppearance
 		    ));
 
 		    // Back Wall
 		    roomTG.addChild(createWall(
-		        new Vector3d(0, -2, -roomLength ), // Position: Back side of the room
+		        new Vector3d(0, -2, -roomLength ),          // Position: Back side of the room
 		        new Vector3d(roomWidth, roomHeight, 0.05), // Scale: Wide and tall, but thin
 		        wallsAppearance
 		    ));
 	
 		    // Front Wall
 		    roomTG.addChild(createWall(
-		        new Vector3d(0, -2 , roomLength), // Position: Front side of the room
+		        new Vector3d(0, -2 , roomLength),           // Position: Front side of the room
 		        new Vector3d(roomWidth, roomHeight, 0.05), // Scale: Wide and tall, but thin
 		        wallsAppearance
 		    ));
 	
 		    // Ceiling
 		    roomTG.addChild(createWall(
-		        new Vector3d(0,14, 0), 
+		        new Vector3d(0,27, 0), 
 		        new Vector3d(roomWidth, 0.05, roomLength), // Scale: Wide and long, but thin
 		        ceilingAppearance
 		    ));
