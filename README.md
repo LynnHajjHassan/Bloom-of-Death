@@ -1,112 +1,87 @@
-# Project: Bloom of Death  
+# 🌸 Project: Bloom of Death
 
-Game Type: Crime investigation mystery game.
+**Bloom of Death** is a narrative-driven interactive mystery experience. The player wakes up in a mysterious room, beside a corpse, with no memory of what happened. Their goal is to explore the environment, interact with various objects, uncover hidden clues, and piece together the truth behind the murder. But beware—an unexpected twist awaits at the end.
 
-Setting: The player wakes up in a strange room with no memory of how they got there and sees a corpse lying on the floor. 
+---
 
-Gameplay: Players use their instincts to guide them. They can click on and inspect various objects lying around the room.
+## 🎮 Features
 
-Objective: Slowly piece together the clues and reveal the killer’s identity.
+- **Interactive Crime Scene**: Explore and investigate objects in a detailed 3D room environment.
+- **Immersive Java3D Graphics**: Built using Java3D to provide a realistic and atmospheric visual experience.
+- **Collision Detection**: Objects have boundaries—no walking through tables or walls.
+- **Mouse & Keyboard Interaction**: Use intuitive controls to move around and interact with items.
+- **Environmental Animations**: Effects like opening letters, flickering lights, and turning on the TV add realism.
+- **Dynamic Sound Design**: Unique sound effects for various objects and immersive ambient audio.
+- **Cinematic Effects**: Includes camera shakes and other visual effects to enhance storytelling and tension.
+- **First-Person Navigation**: Classic FPS-style controls for seamless exploration.
 
+---
 
-## 📌 Features
+## 📁 Project Structure
 
-- Interactive Crime Scene: Players can explore and interact with objects in a 3D environment.
-- Java3D Graphics: The game leverages Java3D to render a fully immersive crime scene environment.
-- Collision Detection: Prevents players from walking through tables and other objects.
-- Interaction with Mouse/Keyboard: Enables interaction with evidence and other game elements.
-- Animations: Includes effects like opening letters, turning on Tv, etc. 
-- Sounds: Objects have unique sound effects, and certain environmental elements will produce ambient sounds.
-- Navigation: First-person controls using the mouse and keyboard for movement and interaction.
-
-## 📁 Project Structure  
 ```plaintext
 Bloom of Death/
-├── models/                     # Stores 3D object files
-├── sounds/                     # Sound effects and music files
-├── textures/                   # Texture files for objects and scenes
-├── lib/                        # Required libraries
-├── src/  
-│   ├── core/                   # Core game logic
+├── objects/                    # 3D model files (.obj)
+├── sounds/                     # Sound effects and background audio
+├── textures/                   # Textures applied to 3D models
+├── lib/                        # External Java libraries (Java3D, etc.)
+├── Preview/                    # Demo video and screenshots
+├── src/
+│   ├── core/                   # Core game logic and state management
 │   │   ├── GameState.java
 │   │   ├── TriggerEvents.java
-│   │   ├── BODMain.java
-│   │
-│   ├── models/                  # 3D and interactive objects
-│   │   ├── background
-│   │   ├── BaseShapesHS
-│   │   ├── BloodPool
-│   │   ├── BODObjects
-│   │   ├── CactusPotScene
-│   │   ├── Carpet
-│   │   ├── CeilingLamp
-│   │   ├── ChairHS
-│   │   ├── clock
-│   │   ├── ClockMain
-│   │   ├── ClockObjects4
-│   │   ├── Commons
-│   │   ├── Corpse
-│   │   ├── DoubleBass
-│   │   ├── drugsHS
-│   │   ├── drugsObject3
-│   │   ├── FlatScreenTV
-│   │   ├── FloorPillow
-│   │   ├── FlowerScene
-│   │   ├── flowerVase2
-│   │   ├── FlowerVaseScene
-│   │   ├── frameMain
-│   │   ├── frameTeam
-│   │   ├── GarbageCan
-│   │   ├── HiddenLetter
-│   │   ├── Knife
-│   │   ├── MailScene
-│   │   ├── Mirror
-│   │   ├── OpenMailScene
-│   │   ├── Pill
-│   │   ├── PillBottle
-│   │   ├── Pillow
-│   │   ├── Plant2PotScene
-│   │   ├── PlantPotScene
-│   │   ├── RecordPlayer
-│   │   ├── Room
-│   │   ├── SideTableHS
-│   │   ├── Sofa
-│   │   ├── Table5
-│   │   ├── TableLamp
-│   │   ├── TVGlitch
-│   │   ├── TVScene
-│   │   ├── TVScene2
-│   │   ├── WindowMain
-│   │   ├── WindowObjects
-│   │
-│   ├── audio/                   # Handles sound and music playback
+│   │   └── BODMain.java
+│   ├── models/                 # All interactive and decorative 3D objects
+│   ├── audio/                  # Sound handling logic
 │   │   ├── SoundManager.java
-│   │   ├── SoundUtilityJOA.java
-│   │
-│   ├── effects/                 # Visual and gameplay effects
-│   │   ├── CameraEffects.java
-│   │   ├── InnerThought.java
-│   │   ├── Lights.java
-│   │   ├── Display2DImage.java
-│
-├── README.md                    # Overview of the repository
-├── .settings/                    # Project settings (specific to IDEs like Eclipse)
-├── .classpath & .project         # Eclipse configuration files
-└── bin/                          # Compiled bytecode
-
+│   │   └── SoundUtilityJOA.java
+│   └── effects/                # Lighting, camera, inner thoughts, and other visual effects
+│       ├── CameraEffects.java
+│       ├── InnerThought.java
+│       ├── Lights.java
+│       └── Display2DImage.java
+├── README.md                   # This file
+├── Project's Report            # Final project documentation/report
+├── .settings/                  # IDE settings (Eclipse-specific)
+├── .classpath & .project       # Eclipse project configuration
+└── bin/                        # Compiled bytecode
 ```
 
+---
 
-## How to Run the Project
-1. Clone or download the repository.
-2. Open Eclipse and import the project:
-   - Go to **File** > **Import** > **General** > **Existing Projects into Workspace**.
-   - Select the folder where the project was cloned/extracted.
-3. The `lib/` folder contains all required libraries (must be .jdk not .jre)
-   - **Run** --> **Run configurations**  --> **arguments** -->  copy paste those arguments in VM arguments : 
-```plaintext
---add-exports=java.base/java.lang=ALL-UNNAMED
---add-exports=java.desktop/sun.awt=ALL-UNNAMED
---add-exports=java.desktop/sun.java2d=ALL-UNNAMED
-```
-4. Right-click on **BODMain.java** and select **Run As** > **Java Application**.
+## 🚀 How to Run the Project
+
+1. **Clone or Download the Repository**
+   - Clone via Git or download the ZIP file and extract it.
+
+2. **Import into Eclipse**
+   - Open Eclipse.
+   - Navigate to **File > Import > General > Existing Projects into Workspace**.
+   - Browse and select the root folder of the project.
+
+3. **Configure the Java Runtime**
+   - Ensure you're using a **JDK** (not JRE) in your build path.
+   - Add the necessary VM arguments for Java modules:
+     ```
+     --add-exports=java.base/java.lang=ALL-UNNAMED
+     --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+     --add-exports=java.desktop/sun.java2d=ALL-UNNAMED
+     ```
+
+4. **Run the Application**
+   - Navigate to `BODMain.java` in the `core` package.
+   - Right-click the file and select **Run As > Java Application**.
+
+---
+
+## 🎥 Preview
+
+Visit the **Preview/** folder to check out gameplay screenshots and a demo video showcasing the game's atmosphere and key mechanics.
+
+---
+
+## 📝 Notes
+
+- This project was developed as part of an academic course and is intended for educational/demonstration purposes.
+- Some models and sounds were adapted from open-source or free-to-use resources.
+- Java3D setup might require additional configuration depending on your OS.
