@@ -25,7 +25,7 @@ Bloom of Death/
 ├── sounds/                     # Sound effects and background audio
 ├── textures/                   # Textures applied to 3D models
 ├── lib/                        # External Java libraries (Java3D, etc.)
-├── Preview/                    # Demo video and screenshots
+├── Preview/                    # Demo screenshots
 ├── src/
 │   ├── core/                   # Core game logic and state management
 │   │   ├── GameState.java
@@ -74,9 +74,20 @@ Bloom of Death/
 
 ---
 
-## 🎥 Preview
 
-Visit the **Preview/** folder to check out gameplay screenshots and a demo video showcasing the game's atmosphere and key mechanics.
+## 🎥 Preview Video
+
+Watch a short gameplay preview of *Bloom of Death*:
+
+👉 [Watch on Google Drive](https://drive.google.com/file/d/1pEHUG0f4qjVnMa_fV60Fxg4G14Ds4aoU/view?usp=sharing)
+
+![Preview Screenshot](Preview/photo1.png)
+![Preview Screenshot](Preview/photo2.png)
+![Preview Screenshot](Preview/photo3.png)
+![Preview Screenshot](Preview/photo4.png)
+![Preview Screenshot](Preview/photo5.png)
+![Preview Screenshot](Preview/photo6.png)
+
 
 ---
 
